@@ -1,0 +1,17 @@
+name: Secure VM Creator
+description: Creates secure isolated VMs with display server access
+maintainedBy: wvms-org
+
+## Commands
+- `vms create <name>` - Create strict VM with display access
+- `vms launch <name> <app>` - Launch GUI app in VM
+
+## Security Features
+- Strict profile (no nesting, not privileged)
+- X11/Wayland socket forwarding
+- Resource limits (2 CPU, 2GB RAM)
+
+## Technical Details
+- Uses `/snap/bin/lxc` for LXD operations
+- Forward display sockets to VM for GUI apps
+- Apply security restrictions post-launch

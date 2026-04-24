@@ -1,0 +1,34 @@
+name: wvms
+description: Secure isolated VMs with display server access via LXD/LXC
+maintainedBy: wvms-org
+
+## What is wvms?
+wvms creates secure, isolated virtual machines using LXD/LXC with access to the host's X11 or Wayland display server.
+
+## Core Features
+- **Strict Security**: VMs run with strict isolation (no nesting, not privileged)
+- **Display Forwarding**: Native X11 and Wayland socket forwarding
+- **Profile Management**: Automatic strict profile creation and management
+
+## Usage
+```bash
+# Create a strict VM
+vms create myvm
+
+# Launch GUI app in VM
+vms launch myvm firefox
+
+# Force X11 mode
+vms launch myvm firefox --x11
+```
+
+## Requirements
+- LXD/LXC installed (`/snap/bin/lxc` available)
+- X11 or Wayland display on host
+- Ubuntu or similar Linux distro
+
+## Security
+- security.nesting: false
+- security.privileged: false
+- security.protocols: clear
+- linux.kernel_modules: (empty)

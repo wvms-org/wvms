@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -88,7 +90,7 @@ func setupWaylandForward(ctx context.Context, client *lxd.Client, vmName, socket
 	}
 
 	remoteDir := fmt.Sprintf("%s/run/user/1000", vmName)
-	if err := client.ExecToString(vmName, "mkdir", "-p", remoteDir); err != nil {
+	if _, err := client.ExecToString(vmName, "mkdir", "-p", remoteDir); err != nil {
 		return nil, fmt.Errorf("failed to create runtime dir: %w", err)
 	}
 
@@ -97,7 +99,7 @@ func setupWaylandForward(ctx context.Context, client *lxd.Client, vmName, socket
 		return nil, fmt.Errorf("socket forward failed: %w", err)
 	}
 
-	if err := client.ExecToString(vmName, "chmod", "660", remotePath); err != nil {
+	if _, err := client.ExecToString(vmName, "chmod", "660", remotePath); err != nil {
 		return nil, fmt.Errorf("chmod failed: %w", err)
 	}
 
@@ -112,7 +114,7 @@ func setupWaylandForward(ctx context.Context, client *lxd.Client, vmName, socket
 		gid = strings.TrimSpace(gidOutput)
 	}
 
-	if err := client.ExecToString(vmName, "chown", uid+":"+gid, remotePath); err != nil {
+	if _, err := client.ExecToString(vmName, "chown", uid+":"+gid, remotePath); err != nil {
 		return nil, fmt.Errorf("chown failed: %w", err)
 	}
 
@@ -129,7 +131,7 @@ func setupX11Forward(ctx context.Context, client *lxd.Client, vmName string) ([]
 	}
 
 	remoteDir := fmt.Sprintf("%s/root", vmName)
-	if err := client.ExecToString(vmName, "mkdir", "-p", remoteDir); err != nil {
+	if _, err := client.ExecToString(vmName, "mkdir", "-p", remoteDir); err != nil {
 		return nil, fmt.Errorf("failed to create home dir: %w", err)
 	}
 
@@ -138,7 +140,7 @@ func setupX11Forward(ctx context.Context, client *lxd.Client, vmName string) ([]
 		return nil, fmt.Errorf("xauth forward failed: %w", err)
 	}
 
-	if err := client.ExecToString(vmName, "chmod", "600", remoteAuthPath); err != nil {
+	if _, err := client.ExecToString(vmName, "chmod", "600", remoteAuthPath); err != nil {
 		return nil, fmt.Errorf("chmod failed: %w", err)
 	}
 

@@ -129,7 +129,17 @@ func TestClientEnsureStrictProfile(t *testing.T) {
 
 	err := client.EnsureStrictProfile()
 	if err != nil {
-		t.Logf("EnsureStrictProfile warning: %v (expected in test env)", err)
+		t.Logf("EnsureStrictProfile: %v (may require permissions)", err)
+	}
+}
+
+func TestClientWaitForDisplayAccess(t *testing.T) {
+	ctx := context.Background()
+	client := New(ctx)
+
+	err := client.WaitForDisplayAccess("nonexistent-vm-123")
+	if err == nil {
+		t.Error("expected error for nonexistent VM")
 	}
 }
 
